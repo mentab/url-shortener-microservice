@@ -22,8 +22,8 @@ app.get('/', function(req, res){
 var findOneByShortUrl = require('./shortUrl.js').findOneByShortUrl;
 app.get("/api/shorturl/:shortUrl", function (req, res, next) {
   findOneByShortUrl(req.params.shortUrl, function(err, data) {
-      if(err) res.json(err);
-      if(!data) res.json({message: 'Missing callback argument'});
+      if(err) return res.json(err);
+      if(!data) return res.json({message: 'Missing callback argument'});
       res.redirect(data.originalUrl);
   });
 });
@@ -31,8 +31,8 @@ app.get("/api/shorturl/:shortUrl", function (req, res, next) {
 var createAndSaveUrl = require('./shortUrl.js').createAndSaveUrl;
 app.post("/api/shorturl/new", function (req, res, next) {
   createAndSaveUrl(req.body.url, function(err, data) {
-    if(err) res.json(err);
-    if(!data) res.json({message: 'Missing callback argument'});
+    if(err) return res.json(err);
+    if(!data) return res.json({message: 'Missing callback argument'});
     res.json({original_url: data.originalUrl, short_url: data.shortUrl});
   });
 });
