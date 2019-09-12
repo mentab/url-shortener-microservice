@@ -34,19 +34,19 @@ app.get('/', function(req, res){
 
 app.get("/api/shorturl/:shortUrl", function (req, res, next) {
   ShortUrl.findOne({shortUrl: req.params.shortUrl}, function(err, data) {
-    if (err) return res.json({ error: "invalid URL 1" });
-    if (!data) return res.json({ error: "invalid URL 2" });
+    if (err) return res.json({ error: "invalid shortUrl" });
+    if (!data) return res.json({ error: "invalid shortUrl" });
     return res.redirect(data.originalUrl);
   });
 });
 
 app.post("/api/shorturl/new", function (req, res, next) {
-  if (!validUrl.isUri(req.body.url)) return res.json({ error: "invalid URL 3" });
+  if (!validUrl.isWebUri(req.body.url)) return res.json({ error: "invalid URL" });
   dns.lookup(url.parse(req.body.url).host, {}, function(err, address, family) {
-    if (err) return res.json({ error: "invalid URL 4" });
+    if (err) return res.json({ error: "invalid URL" });
     var shortUrl = new ShortUrl({shortUrl: uniqid(), originalUrl: req.body.url});
     shortUrl.save(function(err, data) {
-      if (err) return res.json({ error: "invalid URL 5" });
+      if (err) return res.json({ error: "invalid URL" });
       return res.json({original_url: data.originalUrl, short_url: data.shortUrl});
     });
   });
